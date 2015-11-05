@@ -1,10 +1,15 @@
 package compara_busca;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+
+import javax.swing.JOptionPane;
 
 public class Compara_Busca {
 
@@ -13,11 +18,13 @@ public class Compara_Busca {
 		File fichero1 = new File("texto1.txt");
 		File fichero2 = new File("texto2.txt");
 		File fichero3 = new File("texto3.txt");
+		File fichero4 = new File("texto4.txt");
 		String palabraClave = "compruebo";
 		boolean esUltima = false;
 		
-		compararContenido(fichero1, fichero2);
-		buscarPalabra(fichero3, palabraClave, esUltima);
+		//compararContenido(fichero1, fichero2);
+		//buscarPalabra(fichero3, palabraClave, esUltima);
+		ordenarFichero(fichero3, fichero4, 1);
 		
 	}
 	
@@ -90,6 +97,71 @@ public class Compara_Busca {
 			e.printStackTrace();
 		}
 		
+	}
+	
+	public static void ordenarFichero(File origen, File destino, int tipo_orden){
+		FileReader fr = null; //Declaro el FileReader e inicializo a null
+		FileWriter fw = null; //Declaro el FileWriter e inicializo a null
+		BufferedReader br = null; //Declaro el BufferedReader e inicializo a null
+		BufferedWriter bw = null; //Declaro el BufferedWriter e inicializo a null
+		ArrayList<String> lista = new ArrayList<String>(); //Declaro un ArrayList de tipo String
+		
+		//Declaro variables.
+		String str = "";
+		int orden = tipo_orden;
+		
+		//Compruebo el parametro que se nos pasa este en el rango que se acepta.
+		if(orden == 0 || orden == 1){
+			try {
+				//Inicializo
+				fr = new FileReader(origen);
+				fw = new FileWriter(destino);
+				
+				} catch (FileNotFoundException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			
+			//Inicializo
+			br = new BufferedReader(fr);
+			bw = new BufferedWriter(fw);
+			
+			try {
+				//Hasta que llegue al final del fichero, voy guardandolo en el array.
+				while(str != null){
+					lista.add(str);
+					str = br.readLine();
+				}
+				
+				if(orden == 1){
+					//Si quiero el fichero ascendentemente, lo escribe en el fichero de salida desde la posicion 0.
+					for(int x = 0; x <= lista.size()-1; x++){
+						bw.write(lista.get(x)+"\n");
+					}
+				}else{
+					//Si quiero el fichero al contrario, lo escribo desde el final del tamaño del arraylist hasta 0.
+					for(int x = lista.size()-1; x>=0; x--){
+						bw.write(lista.get(x)+"\n");
+					}
+				}
+				
+				//Cierro los flujos de datos.
+				br.close();
+				bw.close();
+				
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}	
+		}else{
+			//Si la variable orden esta fuera del rango, muestro un mensaje de error.
+			System.out.println("El orden tiene que ser 0(descendente) o 1(ascendente)");
+		}
+		
+	
 	}
 		
 
