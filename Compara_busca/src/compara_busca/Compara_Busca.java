@@ -3,13 +3,13 @@ package compara_busca;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-
-import javax.swing.JOptionPane;
 
 public class Compara_Busca {
 
@@ -19,12 +19,14 @@ public class Compara_Busca {
 		File fichero2 = new File("texto2.txt");
 		File fichero3 = new File("texto3.txt");
 		File fichero4 = new File("texto4.txt");
+		File fichero5 = new File("lena.jpg");
 		String palabraClave = "compruebo";
 		boolean esUltima = false;
 		
 		//compararContenido(fichero1, fichero2);
 		//buscarPalabra(fichero3, palabraClave, esUltima);
-		ordenarFichero(fichero3, fichero4, 1);
+		//ordenarFichero(fichero3, fichero4, 1);
+		abrirFichero("lena.jpg", "copia.jpg");
 		
 	}
 	
@@ -160,10 +162,51 @@ public class Compara_Busca {
 			//Si la variable orden esta fuera del rango, muestro un mensaje de error.
 			System.out.println("El orden tiene que ser 0(descendente) o 1(ascendente)");
 		}
-		
-	
 	}
 		
+	public static void abrirFichero(String entrada, String salida){
+		try {
+			//Declaro dos archivos con los strings que recibo
+			File origen = new File(entrada);
+			File destino = new File(salida);
+			
+			//Compruebo que el archivo de origen si que existe.
+			if(origen.exists()){
+				//Si el de destino no existe, entonces hace la copia.
+				if(!destino.exists()){
+					FileInputStream in = new FileInputStream(origen);
+					FileOutputStream out = new FileOutputStream(destino);
+					
+					int c = 0;
+					try {
+						while((c = in.read()) != -1){
+							out.write(c);
+						}
+						
+						in.close();
+						out.close();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}else{
+					//Si el de destino existe, se muestra un mensaje en consola que para que cambien el string de destino.
+					System.out.println("El archivo de destino ya existe. Prueba otro nombre.");
+				}
+
+				
+			}else{
+				//Si el origen no existe, se muestra un mensaje para que se cambia el string de origen.
+				System.out.println("El archivo no existe");
+			}
+
+			
+			
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
 }
 
